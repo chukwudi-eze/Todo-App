@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Todo App</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+		}
+		body {
+			background: #f0f0f5;
+		}
+		#container {
+			width: 65%;
+			margin: auto;
+			box-shadow: 2px 3px 12px #111;
+			padding: 1em;
+			background-color: #ffffff;
+		}
+		h1 {
+			text-align: center;
+			color: #00124d;
+			padding: 1em;
+			text-shadow: 1px 2px 5px #111;
+		}
+		#result {
+			display: none;
+		}
+		#todo-item {
+			text-align: center;
+			font-size: 1.3rem;
+			border: 2px solid #00124d;
+			padding: 0.5em;
+			margin: 0.5em 0;
+			font-weight: bold;
+			color: #00124d;
+			overflow: hidden;
+		}
+		#todo-item input[type="button"] {
+			float: right;
+			padding: 0.4em;
+			color: #00124d;
+			background-color: transparent;
+			border: none;
+			border: 1px solid #00124d;
+		}
+		#todo-item input[type="button"]:hover {
+			background-color: #e6e6e6;
+			cursor: pointer;
+		}
+		#todo-item input[type="checkbox"] {
+			float: left;
+			width: 20px;
+			height: 20px;
+		}
+		input {
+			outline: none; 
+			border: none; 
+			border-radius: 10px; 
+			border: 1px solid white; 
+			box-shadow: 2px 2px 8px grey;
+		}
+		form {
+			margin: 2em 0;
+			text-align: center;
+		}
+		input[type="text"] {
+			height: 35px; 
+			width: 45%;
+		}
+		input[type="submit"] {
+			padding: 0.7em; 
+			color: white; 
+			background-color: #00124d; 
+			cursor: pointer; 
+			width: 20%;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<h1>TO-DO APP</h1>
+		<form>
+			<input type="text" name="text" id="input-text">
+			<input type="submit" name="submit" id="submit" value="+Todo item"><br><br>
+			<input type="submit" name="submit" id="delete-selected" value="Delete selected">
+			<input type="submit" name="submit" id="delete-all" value="Delete All">
+		</form>
+		<div id="result"></div>
+	</div>
+	
+<script type="text/javascript">
+	let	inputText = document.getElementById('input-text');
+	let submit = document.getElementById('submit');
+	let result = document.getElementById('result');
+	let todoItem = document.getElementById('todo-item');
+	let deleteSelected = document.getElementById('delete-selected');
+	let deleteAll = document.getElementById('delete-all');
+
+	inputText.focus();
+
+	submit.addEventListener('click', (e) => {
+		e.preventDefault();
+		result.style.display = "block";
+
+		if (inputText.value == "" || inputText.value == null) {
+			return false;
+		}
+		let newElement = document.createElement("div");
+		let newContent = document.createTextNode(inputText.value.toUpperCase());
+		
+		let newButton = document.createElement("input");
+		let newButtonContent = document.createTextNode("Delete");
+
+		let newCheckBox = document.createElement("input");
+
+		newElement.appendChild(newContent);
+		newElement.setAttribute('id', 'todo-item');
+		result.appendChild(newElement);
+
+		newButton.setAttribute('type', 'button');
+		newButton.setAttribute('value', 'Delete');
+		newButton.appendChild(newButtonContent);
+		newElement.appendChild(newButton);
+
+		newCheckBox.setAttribute('type', 'checkbox');
+		newElement.appendChild(newCheckBox);
+
+		inputText.value = "";
+
+		newButton.addEventListener('click', function() {
+			newElement.style.cssText = "display: none; border: none;";
+		});
+
+		newCheckBox.addEventListener('click', function() {
+			if (newCheckBox.checked) {
+				console.log('Item has been selected!');
+				newElement.style.cssText = "color: red;";
+				newElement.setAttribute('class', 'selected');
+
+				deleteSelected.addEventListener('click', (e) => {
+					e.preventDefault();
+					let selected = document.querySelectorAll('.selected');
+
+					for (var i = 0; i < selected.length; i++) {
+						selected[i].style.cssText = "display: none; border: none;";
+					}
+					
+				});
+
+			} else if (!newCheckBox.checked) {
+				console.log('Item is not selected!');
+				newElement.style.cssText = "color: #00124d;";
+			}
+		});
+
+		deleteAll.addEventListener('click', (e) => {
+			e.preventDefault();
+			let selected = document.querySelectorAll('#todo-item');
+			for (var i = 0; i < selected.length; i++) {
+				selected[i].style.cssText = "display: none; border: none;";
+			}
+		});
+	});
+</script>
+</body>
+</html>
